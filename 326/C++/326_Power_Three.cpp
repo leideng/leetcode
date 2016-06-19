@@ -36,6 +36,7 @@ class Solution
                 return false;
             }
         }
+        
         return (n==1);
     }
 };
