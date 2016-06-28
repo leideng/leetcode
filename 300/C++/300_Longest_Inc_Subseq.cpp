@@ -55,6 +55,15 @@ Follow up: Could you improve it to O(n log n) time complexity?
     Subseq 1: [2,3]
     Subseq 2: [2,3,7]
     Subseq 3: [2,3,7,18]
+    
+*/
+
+/** Another Algorithm
+
+    1. We construct a DAG element by element: suppose the current graph has node set S and we come to node i,
+       we then add i into S, and for each j in S, if j < i, we add an edge from j to i in the current graph
+    2. We then find the longest path in the DAG
+    
 */
 
 class Solution 
