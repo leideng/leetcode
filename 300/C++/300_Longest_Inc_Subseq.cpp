@@ -56,6 +56,47 @@ Follow up: Could you improve it to O(n log n) time complexity?
     Subseq 2: [2,3,7]
     Subseq 3: [2,3,7,18]
     
+    Further improvement:
+    We do not need to maintain the current subsequence. Instead, we only need
+    to maintain the length of longest increasing subsequence of all existing nodes. 
+    (For every subsequence, only the length and the tail matter).
+    
+    Example: [10, 9, 2, 5, 3, 7, 101, 18]
+    
+    Step 1: Add 10
+    Subseq 0: len[10]=1 
+    
+    Step 2: Add 9
+    Subseq 0: len[9]=1 (We can remove len[10]=1 now, again, we only need to maintain one same-length subsequence)
+    
+    Step 3: Add 2 
+    Subseq 0: len[2]=1
+    
+    Step 4: Add 5 
+    Subseq 0: len[2]=1
+    Subseq 1: len[5]=2
+    
+    Step 5: Add 3 
+    Subseq 0: len[2]=1
+    Subseq 1: len[3]=2
+    
+    Step 6: Add 7 
+    Subseq 0: len[2]=1
+    Subseq 1: len[3]=2
+    Subseq 2: len[7]=3
+    
+    Step 7: Add 101 
+    Subseq 0: len[2]=1
+    Subseq 1: len[3]=2
+    Subseq 2: len[7]=3
+    Subseq 3: len[101]=4
+    
+    Step 8: Add 18 
+    Subseq 0: len[2]=1
+    Subseq 1: len[3]=2
+    Subseq 2: len[7]=3
+    Subseq 3: len[18]=4
+    
 */
 
 /** Another Algorithm
