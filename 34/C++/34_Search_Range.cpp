@@ -14,9 +14,9 @@ return [3, 4].
 
 /** Algorithm Outline
 
-    1. First binary algorithm for a position (pos) of the target value
-    2. Then for the left interval [0,pos], find the first element of the target value, serving as the left index (left)
-    3. And for the right interval [pos, n], find the last element of the target value, serving as the right index (right)
+    1. First binary search a position (pos) of the target value
+    2. Then for the left interval [0,pos], binary search the first element of the target value, serving as the left index (left)
+    3. And for the right interval [pos, n], binary search the last element of the target value, serving as the right index (right)
     
 */
 
