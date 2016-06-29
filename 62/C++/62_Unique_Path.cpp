@@ -10,6 +10,8 @@ How many possible unique paths are there?
 
 /** Algorithm Outline
 
+    1 Use dynamic programming
+    
 */
 
 
