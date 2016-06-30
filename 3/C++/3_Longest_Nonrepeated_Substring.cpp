@@ -52,9 +52,14 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
     For "k":    cur_str="ewk"  max=3  cur_idx=3 cur_map={<'p',0>, <'w',5>, <'k',6>, <'e', 4>}
     For "a":    cur_str="ewka" max=4  cur_idx=3 cur_map={<'p',0>, <'w',5>, <'k',6>, <'e', 4>, <'a',7>} 
     
+    
+    Further Improvement:
+    cur_map can be implemented by a hash table, e.g., unordered_map in C++
+    However, since the letter set is given, we can use an array to further reduce the complexity
 
 */ 
 
+/** Use hash table
 class Solution 
 {
     public:
@@ -73,6 +78,46 @@ class Solution
                                                                    //e.g., s[i]=c   current substring = abcd
             {
                 cur_idx = miter->second+1; //we replace the current subsubstring, e.g., abcd =>  dc (remove abc)
+                                           //this is equivalent to update cur_idx
+                cur_map[s[i]] = i;         //also remember to update cur_map[s[i]], i.e., cur_map[c]=2 =>  cur_map[c]=4       
+            }
+            else //this character is not in the current substring
+            {
+                cur_map[s[i]] = i; //we then insert the current character
+                if(i-cur_idx+1 > max)
+                {
+                    max = i-cur_idx+1; //we also update max if possible
+                }
+            } 
+        }
+        
+        return max;
+    }
+};
+
+*/
+
+
+class Solution 
+{
+    public:
+    
+    int lengthOfLongestSubstring(string s) 
+    {
+        // cur_map[c]=k, means the current position for character c is k
+        //unordered_map<char, int> cur_map;
+        vector<int> cur_map(128,-1);
+        int cur_idx = 0; //the current index for the beginning of the current substring
+        int max = 0;
+        
+        for(int i=0; i < s.size(); ++i)
+        {
+            //unordered_map<char, int>::iterator miter = cur_map.find(s[i]);
+            //if(miter != cur_map.end() && miter->second >= cur_idx) //we have found this in current substring, 
+                                                                   //e.g., s[i]=c   current substring = abcd
+            if(cur_map[s[i]] >= cur_idx)                                                          
+            {
+                cur_idx = cur_map[s[i]]+1; //we replace the current subsubstring, e.g., abcd =>  dc (remove abc)
                                            //this is equivalent to update cur_idx
                 cur_map[s[i]] = i;         //also remember to update cur_map[s[i]], i.e., cur_map[c]=2 =>  cur_map[c]=4       
             }
