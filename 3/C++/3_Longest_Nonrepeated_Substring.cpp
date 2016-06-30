@@ -14,6 +14,44 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
 
 
 /** Algorithm Outline
+    
+    1 Loop for each letter in the string
+    2 We maintain the current substring (cur_str) and the length (max) of longest substring without repeating characters until the current letter
+    3 If the current letter is in the current substring, we should remove the subsubstring of the current substring, from the beginning to the     
+      repeated current letter
+    4 If the current letter is not in the current substring, we just insert the current letter into the current substring
+    
+    Example "pwwkewka"
+    
+    Initialize: cur_str=""     max=0  
+    For "p":    cur_str="p"    max=1
+    For "w":    cur_str="pw"   max=2
+    For "w":    cur_str=""     max=2
+    For "k":    cur_str="k"    max=1
+    For "e":    cur_str="ke"   max=2
+    For "w":    cur_str="kew"  max=3
+    For "k":    cur_str="ewk"  max=3
+    For "a":    cur_str="ewka" max=4
+    
+    Reduce Complexity: 
+    The complexity comes from two parts:
+    (i) Find if the current letter is in the current substr
+    (ii) Remove the subsubstring of the current substring, from the beginning to the     
+      repeated current letter
+      
+    Both of them can be done in constant time: We maintain a hashtable (cur_map) of <letter, position> and a current index (cur_idx) of the beginning of the current substring 
+    
+    Initialize: cur_str=""     max=0  cur_idx=0 cur_map=""             
+    For "p":    cur_str="p"    max=1  cur_idx=0 cur_map={<'p',0>}      
+    For "w":    cur_str="pw"   max=2  cur_idx=0 cur_map={<'p',0>, <'w',1>} 
+    For "w":    cur_str="w"    max=2  cur_idx=2 cur_map={<'p',0>, <'w',2>} //we find cur_map['w']-1>cur_idx, thus 'w' is in the current substring
+                                                                           //we only need to update cur_map['w'] to be 2 (do not need to remove)
+    For "k":    cur_str="wk"   max=2  cur_idx=2 cur_map={<'p',0>, <'w',2>, <'k',3>} 
+    For "e":    cur_str="wke"  max=3  cur_idx=2 cur_map={<'p',0>, <'w',2>, <'k',3>, <'e', 4>}
+    For "w":    cur_str="kew"  max=3  cur_idx=3 cur_map={<'p',0>, <'w',5>, <'k',3>, <'e', 4>}
+    For "k":    cur_str="ewk"  max=3  cur_idx=3 cur_map={<'p',0>, <'w',5>, <'k',6>, <'e', 4>}
+    For "a":    cur_str="ewka" max=4  cur_idx=3 cur_map={<'p',0>, <'w',5>, <'k',6>, <'e', 4>, <'a',7>} 
+    
 
 */ 
 
@@ -25,39 +63,27 @@ class Solution
     {
         // cur_map[c]=k, means the current position for character c is k
         unordered_map<char, int> cur_map;
+        int cur_idx = 0; //the current index for the beginning of the current substring
         int max = 0;
         
         for(int i=0; i < s.size(); ++i)
         {
             unordered_map<char, int>::iterator miter = cur_map.find(s[i]);
-            if( miter == cur_map.end()) //this character is not in the current substring
+            if(miter != cur_map.end() && miter->second >= cur_idx) //we have found this in current substring, 
+                                                                   //e.g., s[i]=c   current substring = abcd
             {
-                cur_map[s[i]] = i;
-                
-                if(cur_map.size() > max)
-                {
-                    max = cur_map.size();
-                }
+                cur_idx = miter->second+1; //we replace the current subsubstring, e.g., abcd =>  dc (remove abc)
+                                           //this is equivalent to update cur_idx
+                cur_map[s[i]] = i;         //also remember to update cur_map[s[i]], i.e., cur_map[c]=2 =>  cur_map[c]=4       
             }
-            else //we have found this in current substring, e.g., s[i]=c   current substring = abcd
+            else //this character is not in the current substring
             {
-                //we remove the subsubstring that is before this repeated character, e.g., abcd =>  dc (remove abc)
-                int idx = miter->second;
-                for(unordered_map<char, int>::iterator mi_temp=cur_map.begin(); mi_temp != cur_map.end();)
+                cur_map[s[i]] = i; //we then insert the current character
+                if(i-cur_idx+1 > max)
                 {
-                    if(mi_temp->second <= idx)
-                    {
-                        cur_map.erase(mi_temp++);  // advance before iterator become invalid
-                    }
-                    else
-                    {
-                        mi_temp++;
-                    }
+                    max = i-cur_idx+1; //we also update max if possible
                 }
-                //we then insert the current character
-                cur_map[s[i]] = i;
-            }
-            
+            } 
         }
         
         return max;
