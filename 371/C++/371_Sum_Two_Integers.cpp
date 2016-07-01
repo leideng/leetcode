@@ -10,6 +10,7 @@ Given a = 1 and b = 2, return 3.
 
 /** Algorithm Outline
 
+    1 Use bit operations 
 
 */
 
