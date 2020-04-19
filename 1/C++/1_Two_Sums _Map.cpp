@@ -26,7 +26,7 @@ class Solution
     
     vector<int> twoSum(vector<int>& nums, int target) 
     {
-        int a;
+        int a ;
         int b;
         vector<int> result;
         //take care of the special case target = a + a
